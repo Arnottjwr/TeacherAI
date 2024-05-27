@@ -3,10 +3,10 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "example_package_YOUR_USERNAME_HERE"
+name = "note_recognition"
 version = "0.0.1"
 authors = [
-  { name="Example Author", email="author@example.com" },
+  { name="Jack Arnott", email="jack_arnott@yahoo.com" },
 ]
 description = "A small example package"
 readme = "README.md"
