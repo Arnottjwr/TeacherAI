@@ -7,6 +7,11 @@ import numpy as np
 import librosa
 import glob
 
+
+class AudioLoader:
+    pass 
+
+
 class PreProcessor:
 
     def __init__(self, filepath: str) -> None:
@@ -32,6 +37,10 @@ class PreProcessor:
         return xf, m
     
     def get_frequency(self, audio_file, sample_rate):
+        """
+        AI Generated
+        
+        """
         x, sr = librosa.load(audio_file, sr=sample_rate)
         # Perform FFT and get frequency and magnitude
         D = librosa.stft(x)
