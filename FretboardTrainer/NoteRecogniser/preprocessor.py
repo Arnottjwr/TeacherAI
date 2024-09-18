@@ -1,11 +1,10 @@
 """
 Script which analyses an audio sample and determines the note played using a Fourier transform.
 """
-
-from scipy import fftpack
-import numpy as np 
-import librosa
 import glob
+from scipy import fftpack
+import numpy as np
+import librosa
 
 
 class AudioLoader:
@@ -14,42 +13,36 @@ class AudioLoader:
     
     def load_audio(self):
         return librosa.load()
-    
-
 
 
 class PreProcessor:
     def __init__(self, signal: np.ndarray, sample_rate: float) -> None:
+        """_summary_
+
+        Args:
+            signal (np.ndarray): _description_
+            sample_rate (float): _description_
+        """
         self.signal = signal
         self.sample_rate = sample_rate
 
-    def get_frequency_scipy(self):
+    def get_frequency_scipy(self): #TODO - typehint
         """
         Obtains the frequency values for a given signal and sample rate
 
-        Parameters:
-            signal (array-like): The input signal.
-            sampling_rate (float): The sampling rate of the signal.
+        Args:
+            signal (np.ndarray): The input signal
+            sampling_rate (float): The sampling rate of the signal
         """
 
-        N = len(self.signal)
-        T = 1.0 / self.sample_rate
-        y = self.signal[:N]
-        yf = fftpack.fft(y)
-        xf = fftpack.fftfreq(N, T)[:N//2]    
-        m = 2.0 / N * np.abs(yf[:N // 2])
-        return xf, m
-    
-    def get_frequency_libro(self):
-        """
-        AI Generated
-        
-        """
-        # Perform FFT and get frequency and magnitude
-        D = librosa.stft(self.signal)
-        freq = librosa.fft_frequencies(sr=self.sample_rate)
-        magnitude = 2 * librosa.magphase(D)[0]
-        return freq, magnitude
+        signal_points = len(self.signal)
+        time = 1.0 / self.sample_rate
+        signal_array = self.signal[:signal_points]
+        fft_signal = fftpack.fft(signal_array)
+        xf = fftpack.fftfreq(signal_points, time)[:signal_points//2]    
+        magnitude = 2.0 / signal_points * np.abs(fft_signal[:signal_points // 2])
+
+        return xf, magnitude
 
 
 
