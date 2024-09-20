@@ -7,7 +7,7 @@ import numpy as np
 import librosa
 
 class AudioLoader:
-    def __init__(self,filepath: str) -> None:
+    def __init__(self, filepath: str) -> None:
         self.signal = glob.glob(filepath, recursive=True)
     
     def load_audio(self):
