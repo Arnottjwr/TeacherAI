@@ -6,21 +6,9 @@ from scipy import fftpack
 import numpy as np
 import librosa
 
-class AudioLoader:
+class NoteRecogniser:
     def __init__(self, filepath: str) -> None:
-        self.signal = glob.glob(filepath, recursive=True)
-    
-    def load_audio(self):
-        return librosa.load()
-
-class PreProcessor:
-    def __init__(self, signal: np.ndarray, sample_rate: float) -> None:
-        """_summary_
-
-        Args:
-            signal (np.ndarray): _description_
-            sample_rate (float): _description_
-        """
+        signal, sample_rate = librosa.load(filepath,sr = sample_rate) 
         self.signal = signal
         self.sample_rate = sample_rate
 
@@ -41,12 +29,8 @@ class PreProcessor:
         magnitude_array = 2.0 / signal_points * np.abs(fft_signal[:signal_points // 2])
         return freq_array, magnitude_array
 
-class NoteRecogniser:
-    def __init__(self, freq_array: np.ndarray, magnitude_array: np.ndarray) -> None:
-        self.freq_array = freq_array
-        self.magnitude_array = magnitude_array
-
-
+    def determine_note(self):
+        pass
 
 if __name__ == '__main__':
     pass
