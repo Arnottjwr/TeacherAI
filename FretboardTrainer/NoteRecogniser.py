@@ -1,7 +1,6 @@
 """
 Script which analyses an audio sample and determines the note played using a Fourier transform.
 """
-import glob
 from scipy import fftpack
 import numpy as np
 import librosa
@@ -16,11 +15,8 @@ class NoteRecogniser:
         """
         Obtains the frequency values for a given signal and sample rate
 
-        Args:
-            signal (np.ndarray): The input signal
-            sampling_rate (float): The sampling rate of the signal
+        :return: the frequency and magnitude arrays of the signal
         """
-
         signal_points = len(self.signal)
         time = 1.0 / self.sample_rate
         signal_array = self.signal[:signal_points]
@@ -30,6 +26,11 @@ class NoteRecogniser:
         return freq_array, magnitude_array
 
     def determine_note(self):
+        """Determines the Note played from the Frequency"""
+        pass
+
+    def main(self):
+        """Takes a raw audio sample and returns the note"""
         pass
 
 if __name__ == '__main__':
