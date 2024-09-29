@@ -4,8 +4,6 @@ Script to run the notes of the fretboard excercise
 from scipy import fftpack
 import numpy as np
 import librosa
-import matplotlib.pyplot as plt
-from NoteRecogniser import NoteRecogniser
 
 class FretboardNoteTrainer:
 
@@ -13,15 +11,17 @@ class FretboardNoteTrainer:
         self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#', 'A'}
         self.attempts = 0
 
+
     def generate_note(self) -> str:
         """Generate a random note to be match on the guitar"""
         try:
             correct_note = self.notes.pop()
 
         except KeyError:
-            print('Notes completed, restarting')
-            self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#', 'A'}
-            correct_note = self.notes.pop()
+            print('Notes completed')
+            pass
+            # self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#', 'A'}
+            # correct_note = self.notes.pop()
         
         print(f'Play {correct_note}')
         return correct_note
@@ -62,10 +62,15 @@ class FretboardNoteTrainer:
         return self.freq_to_note(freq_array, magnitude_array)
 
 
-    def input_note(self) -> np.ndarray:
+    def input_note(self, correct_note: str) -> np.ndarray:
         """Function which listens for note and returns audio array"""
-        input()
-
+        played_note = input()
+        if played_note == correct_note:
+            print('Correct')
+            # function which listens for note played
+        else:
+            print('Incorrect, try again')
+        self.attempts += 1
 
     def main(self, filepath) -> None:
         """Main function"""
@@ -82,9 +87,11 @@ class FretboardNoteTrainer:
             else:
                 print('Incorrect, try again')
                 self.attempts += 1
-        
-        effort = 12/self.attempts
-        print(f'\nComplete! \nAttempts: {self.attempts} \nScore: {effort}')
-        if effort == 1:
-            print('Perfect Attempt')
-        
+        print(f'\nComplete! \nAttempts: {self.attempts} \nScore: {12/self.attempts*100}%')
+
+
+    def main_2(self):
+        while self.notes != set():
+            correct_note = self.generate_note()
+            self.input_note(correct_note)
+            
