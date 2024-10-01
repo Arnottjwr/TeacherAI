@@ -62,9 +62,10 @@ class FretboardNoteTrainer:
         return self.freq_to_note(freq_array, magnitude_array)
 
 
-    def input_note(self, correct_note: str) -> np.ndarray:
+    def evaluate_note(self, correct_note: str) -> np.ndarray:
         """Function which listens for note and returns audio array"""
-        played_note = input()
+        signal = input()
+        played_note = self.determine_note_main(signal)
         if played_note == correct_note:
             print('Correct')
             # function which listens for note played
@@ -76,7 +77,7 @@ class FretboardNoteTrainer:
         """Main function"""
         correct_note = self.generate_note()
         while self.notes != set(): # while there are still notes to be played
-            signal = self.input_note() # input function
+            signal = self.evaluate_note() # input function
             played_note = self.determine_note_main(signal)
 
             if played_note == correct_note:
@@ -93,5 +94,5 @@ class FretboardNoteTrainer:
     def main_2(self):
         while self.notes != set():
             correct_note = self.generate_note()
-            self.input_note(correct_note)
+            self.evaluate_note(correct_note)
             
