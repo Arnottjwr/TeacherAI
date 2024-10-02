@@ -1,4 +1,5 @@
 {   "RecordSeconds": 5,
     "Chunk": 1024,
-    "Rate": 44100
+    "Rate": 44100,
+    "InputDeviceIndex" : 1
 }
