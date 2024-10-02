@@ -3,7 +3,7 @@ Based on Brandon D'Eon's excercise for memorising the notes of the fretboard <Vi
 
 this script will test your memorisation of the note of each string.
 
-## Initilisation
+## Initialisation
 - Select Audio Input - An audio interface such as a Focusrite Scarlett is recommended for optimal performance.
 - Select time limit 
 
