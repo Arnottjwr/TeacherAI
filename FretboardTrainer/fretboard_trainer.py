@@ -101,9 +101,7 @@ class FretboardNoteTrainer:
 
 
     def main(self) -> None:
-        """
-        Main function to run
-        """
+        """Main function to run"""
         while self.notes:
             correct_note = self.generate_note()
             while True:
