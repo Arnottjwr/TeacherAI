@@ -11,14 +11,12 @@ import librosa
 import pyaudio
 class FretboardNoteTrainer:
     """
-    _summary_
+    Class which generates the note to be matched and evaluates the input from the player
     """
     def __init__(self):
-
         _loc = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         with open(os.path.join(_loc,'configs.json'),'r',encoding='utf-8') as file:
             self.configs = json.load(file)
-
         self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#'}
         self.attempts = 0
         self.record_seconds = self.configs['RecordSeconds']
@@ -27,7 +25,6 @@ class FretboardNoteTrainer:
         for i in reversed(range(1,4)):
             print(i)
             time.sleep(1)
-
 
 
     def generate_note(self) -> str:
