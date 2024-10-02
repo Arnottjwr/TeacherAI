@@ -4,6 +4,7 @@ Script to run the notes of the fretboard excercise
 import sys
 import os
 import json
+import time
 from scipy import fftpack
 import numpy as np
 import librosa
@@ -22,6 +23,11 @@ class FretboardNoteTrainer:
         self.attempts = 0
         self.record_seconds = self.configs['RecordSeconds']
         self.pyaud = None # TODO - test to see if pyaudio class can be initialised once
+        input("Ready? Press Enter to start")
+        for i in reversed(range(1,4)):
+            print(i)
+            time.sleep(1)
+
 
 
     def generate_note(self) -> str:
