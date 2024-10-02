@@ -2,7 +2,9 @@
 Script to run the notes of the fretboard excercise
 """
 import sys
+import os
 import wave
+import json
 from scipy import fftpack
 import numpy as np
 import librosa
