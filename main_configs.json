@@ -1,0 +1,8 @@
+{
+    "Chunk": 1024,
+    "FretboardTrainer": {
+        "RecordSeconds": 5
+    },
+    "InputDeviceID": 1,
+    "Rate": 44100
+}
