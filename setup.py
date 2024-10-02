@@ -17,5 +17,5 @@ setup(
         'Development Status :: 1 - Planning',
         'Intended Audience :: Musicians',
         'Operating System :: MacOS :: Linux',        
-        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.11'
     ])
