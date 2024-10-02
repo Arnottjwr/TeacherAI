@@ -7,6 +7,7 @@ TeacherAI aims to provide engaging and effective feedback on guitar excercises i
 
 ## Fretboard Trainer
 
+### Recommended Guitar Settings
 
 ## Rhythm Trainer
 Coming Soon
