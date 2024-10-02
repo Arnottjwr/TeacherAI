@@ -4,6 +4,7 @@ Script to run the notes of the fretboard excercise
 from scipy import fftpack
 import numpy as np
 import librosa
+import pyaudio
 
 class FretboardNoteTrainer:
 
