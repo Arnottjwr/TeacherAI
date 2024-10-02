@@ -1,5 +1,5 @@
 import unittest
-from fretboard_trainer import FretboardNoteTrainer
+# from fretboard_trainer import FretboardNoteTrainer
 
 class TestNote(unittest.TestCase):
     
