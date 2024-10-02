@@ -31,6 +31,7 @@ class FretboardNoteTrainer:
         except KeyError:
             print('Notes completed')
             pass
+            # Function to end and present data analysis
             # self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#', 'A'}
             # correct_note = self.notes.pop()
         
@@ -101,61 +102,29 @@ class FretboardNoteTrainer:
         return self.freq_to_note(freq_array, magnitude_array)
 
 
-    def evaluate_note(self, correct_note: str) -> np.ndarray:
+    def evaluate_note(self, correct_note: str, signal: np.ndarray) -> bool:
         """Function which listens for note and returns audio array"""
-        signal = self.record_note()
         played_note = self.determine_note_main(signal)
         if played_note == correct_note:
             print('Correct')
-            # function which listens for note played
-        else:
-            print('Incorrect, try again')
-        self.attempts += 1
+            self.attempts += 1
+            return True
+        print('Incorrect, try again')
+        return False
 
 
-    def main(self, filepath) -> None:
-        """Main function"""
-        correct_note = self.generate_note()
-        while self.notes != set(): # while there are still notes to be played
-            signal = self.evaluate_note() # input function
-            played_note = self.determine_note_main(signal)
-
-            if played_note == correct_note:
-                print('Correct')
-                # function which listens for note played
-                self.attempts += 1
-                self.main(filepath)
-            else:
-                print('Incorrect, try again')
-                self.attempts += 1
-        print(f'\nComplete! \nAttempts: {self.attempts} \nScore: {12/self.attempts*100}%')
-
-
-    def main_2(self):
+    def main(self) -> None:
         while self.notes != set():
             correct_note = self.generate_note()
-            self.evaluate_note(correct_note)
-            
+            while True:
+                played_note = self.record_note()
+                if self.evaluate_note(correct_note, played_note):
+                    print('Correct')
+                    break
+                else:
+                    print('Incorrect, Try again')
+        print(f'\nComplete! \nAttempts: {self.attempts} \nScore: {12/self.attempts*100}%')
 
-    def plotter(self):
-        """Plots the signal and it's frequency"""
-        time_array = np.arange(0,len(self.signal))
-        fig, ax = plt.subplots(1,2, figsize = (15,5))
-        freq, mag = self.get_frequency()
-        
-        ax[0].plot(time_array, self.signal, linestyle='-', color='b', label = 'Note')
-        ax[0].set_xlabel("Time (s)")
-        ax[0].set_ylabel("Magnitude")
-        ax[0].set_title('Signal')
-        ax[0].grid()
-        ax[1].plot(freq,mag)
-        ax[1].set_ylabel("Magnitude")
-        ax[1].set_xlabel("Frequency (Hz)")
-        ax[1].set_title('Signal Frequency')
-        # ax[1].set_xlim(0,4000)
-        ax[1].grid()
-
-        plt.tight_layout()
 
 if __name__ == '__main__':
     trainer = FretboardNoteTrainer()
