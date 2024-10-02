@@ -7,6 +7,7 @@ setup(
     url='https://github.com/Arnottjwr/TeacherAI',
     author='Jack Arnott',
     author_email='jack.arnott@maths.ox.ac.uk',
+    license='MIT',
     packages=['fretboard_trainer'],
     install_requires=['pyaudio',
                       'numpy',
