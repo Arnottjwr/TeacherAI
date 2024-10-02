@@ -10,9 +10,15 @@ import pyaudio
 
 class FretboardNoteTrainer:
 
-    def __init__(self):
+    def __init__(self, record_seconds = 5):
+
+        _loc = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+        with open(os.path.join(_loc,'configs.json'),'r',encoding='utf-8') as file:
+            self.configs = json.load(file)        
+
         self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#', 'A'}
         self.attempts = 0
+        self.record_seconds = record_seconds
 
 
     def generate_note(self) -> str:
