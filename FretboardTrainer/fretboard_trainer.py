@@ -34,10 +34,8 @@ class FretboardNoteTrainer:
         """Generate a random note to be match on the guitar"""
         try:
             correct_note = self.notes.pop()
-
         except KeyError:
             print('Notes completed')
-
         print(f'Play {correct_note}')
         return correct_note
 
