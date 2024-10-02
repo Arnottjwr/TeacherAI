@@ -45,7 +45,7 @@ class FretboardNoteTrainer:
         self.sample_rate = sample_rate
 
 
-    def get_frequency(self, signal) -> tuple[np.ndarray,np.ndarray]:
+    def get_frequency(self, signal) -> tuple[np.ndarray,np.ndarray]: #TODO - determine how to figure out sample rate
         """
         Obtains the frequency values for a given signal and sample rate
 
@@ -60,16 +60,21 @@ class FretboardNoteTrainer:
         return freq_array, magnitude_array
 
 
-    def record_note(self): #TODO - Understand and tune params 
-        chunk = self.configs['Chunk']
+    def record_note(self) -> np.ndarray: #TODO - Understand and tune params #TODO - Make this a generator
+        """
+        Function to record the user's guitar signal to a numpy array
+
+        :return: Recorded signal
+        """
+        chunk = self.configs['Chunk']   
         format = pyaudio.paInt16
         channels = 1 if sys.platform == 'darwin' else 2
         rate = self.configs['rate']
         pyaud = pyaudio.PyAudio()
 
         stream = pyaud.open(format=format, channels=channels, rate=rate, input=True)
-        frames = [] # A python-list of chunks(numpy.ndarray)
-        
+        frames = []
+
         print('Recording...')
         for _ in range(0, int(rate // chunk * self.record_seconds)):
             data = stream.read(chunk)
