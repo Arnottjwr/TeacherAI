@@ -1,0 +1,10 @@
+{
+    "AudioSettings": {
+        "Chunk": 1024,
+        "InputDeviceID": 1,
+        "Rate": 44100
+    },
+    "FretboardTrainer": {
+        "RecordSeconds": 5
+    }
+}

@@ -1,6 +1,0 @@
-{   
-    "RecordSeconds": 5,
-    "Chunk": 1024,
-    "Rate": 44100,
-    "InputDeviceID" : 1
-}
