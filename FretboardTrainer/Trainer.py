@@ -3,13 +3,12 @@ Script to run the notes of the fretboard excercise
 """
 import sys
 import os
-import wave
 import json
 from scipy import fftpack
 import numpy as np
 import librosa
 import pyaudio
-
+import matplotlib.pyplot as plt
 class FretboardNoteTrainer:
 
     def __init__(self, record_seconds = 5):
@@ -21,6 +20,7 @@ class FretboardNoteTrainer:
         self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#', 'A'}
         self.attempts = 0
         self.record_seconds = record_seconds
+        self.pyaud = None # TODO - test to see if pyaudio class can be initialised once
 
 
     def generate_note(self) -> str:
@@ -45,7 +45,7 @@ class FretboardNoteTrainer:
         self.sample_rate = sample_rate
 
 
-    def get_frequency(self) -> tuple[np.ndarray,np.ndarray]:
+    def get_frequency(self, signal) -> tuple[np.ndarray,np.ndarray]:
         """
         Obtains the frequency values for a given signal and sample rate
 
@@ -58,42 +58,41 @@ class FretboardNoteTrainer:
         freq_array = fftpack.fftfreq(signal_points, time)[:signal_points//2]    
         magnitude_array = 2.0 / signal_points * np.abs(fft_signal[:signal_points // 2])
         return freq_array, magnitude_array
-    
-    def record_note(self):#TODO - Understand and tune params 
-        chunk = self.configs['Chunk'] 
+
+
+    def record_note(self): #TODO - Understand and tune params 
+        chunk = self.configs['Chunk']
         format = pyaudio.paInt16
-        CHANNELS = 1 if sys.platform == 'darwin' else 2
-        RATE = self.configs['Rate']
+        channels = 1 if sys.platform == 'darwin' else 2
+        rate = self.configs['rate']
+        pyaud = pyaudio.PyAudio()
 
-        with wave.open('output.wav', 'wb') as waveform:
-            pyaud = pyaudio.PyAudio()
-            waveform.setnchannels(CHANNELS)
-            waveform.setsampwidth(pyaud.get_sample_size(format))
-            waveform.setframerate(RATE)
+        stream = pyaud.open(format=format, channels=channels, rate=rate, input=True)
+        frames = [] # A python-list of chunks(numpy.ndarray)
+        
+        print('Recording...')
+        for _ in range(0, int(rate // chunk * self.record_seconds)):
+            data = stream.read(chunk)
+            frames.append(np.fromstring(data, dtype=np.int16))
+        print('Done')
 
-            stream = pyaud.open(format=format, channels=CHANNELS, rate=RATE, input=True)
+        waveform = np.hstack(frames)
+        stream.stop_stream()
+        stream.close()
+        pyaud.terminate()
 
-            print('Recording...')
-            for _ in range(0, RATE // chunk * self.record_seconds):
-                waveform.writeframes(stream.read(chunk))
-            print('Done')
-            
-            stream.close()
-            pyaud.terminate()
-            
-            return waveform
+        return waveform
 
 
-    def freq_to_note(self, freq_array: np.ndarray, magnitude_array: np.ndarray) -> str:
+    def freq_to_note(self, freq_array: np.ndarray, magnitude_array: np.ndarray) -> str: #TODO - Update method
         """Determines the Note played from the Frequency"""
         note_frequency = freq_array[np.where(magnitude_array == np.max(magnitude_array))[0]]
         return librosa.hz_to_note(note_frequency)[:-1]
 
 
-    def determine_note_main(self, filepath: str) -> str:
+    def determine_note_main(self, signal: np.ndarray) -> str:
         """Main function to determine the note played"""
-        self.load_note(filepath)
-        freq_array, magnitude_array = self.get_frequency()
+        freq_array, magnitude_array = self.get_frequency(signal)
         return self.freq_to_note(freq_array, magnitude_array)
 
 
@@ -107,6 +106,7 @@ class FretboardNoteTrainer:
         else:
             print('Incorrect, try again')
         self.attempts += 1
+
 
     def main(self, filepath) -> None:
         """Main function"""
@@ -131,3 +131,27 @@ class FretboardNoteTrainer:
             correct_note = self.generate_note()
             self.evaluate_note(correct_note)
             
+
+    def plotter(self):
+        """Plots the signal and it's frequency"""
+        time_array = np.arange(0,len(self.signal))
+        fig, ax = plt.subplots(1,2, figsize = (15,5))
+        freq, mag = self.get_frequency()
+        
+        ax[0].plot(time_array, self.signal, linestyle='-', color='b', label = 'Note')
+        ax[0].set_xlabel("Time (s)")
+        ax[0].set_ylabel("Magnitude")
+        ax[0].set_title('Signal')
+        ax[0].grid()
+        ax[1].plot(freq,mag)
+        ax[1].set_ylabel("Magnitude")
+        ax[1].set_xlabel("Frequency (Hz)")
+        ax[1].set_title('Signal Frequency')
+        # ax[1].set_xlim(0,4000)
+        ax[1].grid()
+
+        plt.tight_layout()
+
+if __name__ == '__main__':
+    trainer = FretboardNoteTrainer()
+    trainer.main()
