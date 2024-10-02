@@ -5,21 +5,26 @@ import sys
 import os
 import json
 import time
+from argparse import ArgumentParser
 from scipy import fftpack
 import numpy as np
 import librosa
 import pyaudio
+
 class FretboardNoteTrainer:
     """
     Class which generates the note to be matched and evaluates the input from the player
     """
-    def __init__(self):
+    def __init__(self, *args):
         _loc = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         with open(os.path.join(_loc,'configs.json'),'r',encoding='utf-8') as file:
             self.configs = json.load(file)
+        self.args = args
+
         self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#'}
         self.attempts = 0
-        self.record_seconds = self.configs['RecordSeconds']
+        self.record_seconds = self.args.responsetime if self.args.responsetime else self.configs['RecordSeconds'] 
+        self.input_device_index = None
         self.pyaud = None # TODO - test to see if pyaudio class can be initialised once
         input("Ready? Press Enter to start")
         for i in reversed(range(1,4)):
@@ -37,7 +42,7 @@ class FretboardNoteTrainer:
         return correct_note
 
 
-    def get_frequency(self, signal) -> tuple[np.ndarray,np.ndarray]:
+    def get_frequency(self, signal: np.ndarray) -> tuple[np.ndarray,np.ndarray]:
         """
         Obtains the frequency values for a given signal and sample rate
 
@@ -60,11 +65,15 @@ class FretboardNoteTrainer:
         """
         chunk = self.configs['Chunk']
         rate = self.configs['Rate']
+        input_device_index = self.configs['InputDeviceIndex'] if not self.args.input else self.args.input
         channels = 1 if sys.platform == 'darwin' else 2
-
+        
         pyaud = pyaudio.PyAudio()
 
-        stream = pyaud.open(format=pyaudio.paInt16, channels=channels, rate=rate, input=True)
+        stream = pyaud.open(format=pyaudio.paInt16,
+                            channels=channels,
+                            rate=rate, input=True,
+                            input_device_index=input_device_index)
         frames = []
 
         print('Recording...')
@@ -111,9 +120,18 @@ class FretboardNoteTrainer:
                     print('Correct')
                     break
                 print('Incorrect, Try Again')
+                if self.args.hardmode:
+                    print('Try Again!')
+                    return
         print(f'\nComplete! \nAttempts: {self.attempts} \nScore: {12/self.attempts*100:.2f}%')
 
 
 if __name__ == '__main__':
-    trainer = FretboardNoteTrainer()
+    parser = ArgumentParser(description='TeacherAI')
+    parser.add_argument('-ip','--input', help='Specify Audio Input', required=False)
+    parser.add_argument('-hm','--hardmode', help='Hard Mode On', required=False)
+    parser.add_argument('-rt','--responsetime', help='Response Time Limit', required=False)
+    args = (parser.parse_args())
+    print(args)
+    trainer = FretboardNoteTrainer(*args)
     trainer.main()
