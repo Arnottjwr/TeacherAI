@@ -59,28 +59,29 @@ class FretboardNoteTrainer:
         magnitude_array = 2.0 / signal_points * np.abs(fft_signal[:signal_points // 2])
         return freq_array, magnitude_array
     
-    def record_note(self):
-        CHUNK = 1024
-        FORMAT = pyaudio.paInt16
+    def record_note(self):#TODO - Understand and tune params 
+        chunk = self.configs['Chunk'] 
+        format = pyaudio.paInt16
         CHANNELS = 1 if sys.platform == 'darwin' else 2
-        RATE = 44100
-        RECORD_SECONDS = 5
+        RATE = self.configs['Rate']
 
-        with wave.open('output.wav', 'wb') as wf:
+        with wave.open('output.wav', 'wb') as waveform:
             pyaud = pyaudio.PyAudio()
-            wf.setnchannels(CHANNELS)
-            wf.setsampwidth(pyaud.get_sample_size(FORMAT))
-            wf.setframerate(RATE)
+            waveform.setnchannels(CHANNELS)
+            waveform.setsampwidth(pyaud.get_sample_size(format))
+            waveform.setframerate(RATE)
 
-            stream = pyaud.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True)
+            stream = pyaud.open(format=format, channels=CHANNELS, rate=RATE, input=True)
 
             print('Recording...')
-            for _ in range(0, RATE // CHUNK * RECORD_SECONDS):
-                wf.writeframes(stream.read(CHUNK))
+            for _ in range(0, RATE // chunk * self.record_seconds):
+                waveform.writeframes(stream.read(chunk))
             print('Done')
-
+            
             stream.close()
             pyaud.terminate()
+            
+            return waveform
 
 
     def freq_to_note(self, freq_array: np.ndarray, magnitude_array: np.ndarray) -> str:
