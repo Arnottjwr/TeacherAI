@@ -1,6 +1,8 @@
 """
 Script to run the notes of the fretboard excercise
 """
+import sys
+import wave
 from scipy import fftpack
 import numpy as np
 import librosa
@@ -48,6 +50,29 @@ class FretboardNoteTrainer:
         freq_array = fftpack.fftfreq(signal_points, time)[:signal_points//2]    
         magnitude_array = 2.0 / signal_points * np.abs(fft_signal[:signal_points // 2])
         return freq_array, magnitude_array
+    
+    def record_note(self):
+        CHUNK = 1024
+        FORMAT = pyaudio.paInt16
+        CHANNELS = 1 if sys.platform == 'darwin' else 2
+        RATE = 44100
+        RECORD_SECONDS = 5
+
+        with wave.open('output.wav', 'wb') as wf:
+            pyaud = pyaudio.PyAudio()
+            wf.setnchannels(CHANNELS)
+            wf.setsampwidth(pyaud.get_sample_size(FORMAT))
+            wf.setframerate(RATE)
+
+            stream = pyaud.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True)
+
+            print('Recording...')
+            for _ in range(0, RATE // CHUNK * RECORD_SECONDS):
+                wf.writeframes(stream.read(CHUNK))
+            print('Done')
+
+            stream.close()
+            pyaud.terminate()
 
 
     def freq_to_note(self, freq_array: np.ndarray, magnitude_array: np.ndarray) -> str:
@@ -65,7 +90,7 @@ class FretboardNoteTrainer:
 
     def evaluate_note(self, correct_note: str) -> np.ndarray:
         """Function which listens for note and returns audio array"""
-        signal = input()
+        signal = self.record_note()
         played_note = self.determine_note_main(signal)
         if played_note == correct_note:
             print('Correct')
