@@ -11,7 +11,7 @@ import pyaudio
 import matplotlib.pyplot as plt
 class FretboardNoteTrainer:
 
-    def __init__(self, record_seconds = 5):
+    def __init__(self):
 
         _loc = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         with open(os.path.join(_loc,'configs.json'),'r',encoding='utf-8') as file:
@@ -19,7 +19,7 @@ class FretboardNoteTrainer:
 
         self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#', 'A'}
         self.attempts = 0
-        self.record_seconds = record_seconds
+        self.record_seconds = self.configs['RecordSeconds']
         self.pyaud = None # TODO - test to see if pyaudio class can be initialised once
 
 
@@ -31,19 +31,9 @@ class FretboardNoteTrainer:
         except KeyError:
             print('Notes completed')
             pass
-            # Function to end and present data analysis
-            # self.notes = {'A', 'A#', 'B', 'C', 'C#', 'D', 'E', 'F', 'F#', 'G', 'G#', 'A'}
-            # correct_note = self.notes.pop()
         
         print(f'Play {correct_note}')
         return correct_note
-
-
-    def load_note(self, filepath: str) -> None:
-        """Loads the note played and the sample rate of the audio file"""
-        signal, sample_rate = librosa.load(filepath) 
-        self.signal = signal
-        self.sample_rate = sample_rate
 
 
     def get_frequency(self, signal) -> tuple[np.ndarray,np.ndarray]: #TODO - determine how to figure out sample rate
@@ -70,7 +60,7 @@ class FretboardNoteTrainer:
         chunk = self.configs['Chunk']   
         format = pyaudio.paInt16
         channels = 1 if sys.platform == 'darwin' else 2
-        rate = self.configs['rate']
+        rate = self.configs['Rate']
         pyaud = pyaudio.PyAudio()
 
         stream = pyaud.open(format=format, channels=channels, rate=rate, input=True)
@@ -114,7 +104,7 @@ class FretboardNoteTrainer:
 
 
     def main(self) -> None:
-        while self.notes != set():
+        while self.notes:
             correct_note = self.generate_note()
             while True:
                 played_note = self.record_note()
@@ -123,7 +113,7 @@ class FretboardNoteTrainer:
                     break
                 else:
                     print('Incorrect, Try again')
-        print(f'\nComplete! \nAttempts: {self.attempts} \nScore: {12/self.attempts*100}%')
+        print(f'\nComplete! \nAttempts: {self.attempts} \nScore: {12/self.attempts*100:.2f}%')
 
 
 if __name__ == '__main__':
