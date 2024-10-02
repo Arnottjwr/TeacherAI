@@ -10,6 +10,7 @@ this script will test your memorisation of the note of each string.
 
 ## To Do
 - Data analysis tools
+- make code into Module
 
 
 ## Future Features
