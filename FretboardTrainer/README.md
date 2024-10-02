@@ -1,10 +1,17 @@
 # Note Recogniser 
+Based on Brandon D'Eon's excercise for memorising the notes of the fretboard <Video url="https://www.youtube.com/watch?v=7PMZWb6ZNJc&t=180s&pp=ygUjYnJhbmRvbiBkZW9uIG5vdGVzIG9mIHRoZSBmcmV0Ym9hcmQ%3D"/>, 
 
-## Pipeline
+this script will test your memorisation of the note of each string.
 
-### Audio Loader
-- Takes in raw signal and prepares it for the preproccessor
-### PreProccessor
-- Performs FFT on the signal
-### Note Recogniser
-- Determines the note of the signal 
+## Initilisation
+- Select Audio Input - An audio interface such as a Focusrite Scarlett is recommended for optimal performance.
+- Select time limit 
+
+
+## To Do
+- Data analysis tools
+
+
+## Future Features
+- Play both notes on each string
+- Specify string and hence frequencies
