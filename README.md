@@ -4,18 +4,18 @@ TeacherAI aims to provide engaging and effective feedback on guitar excercises i
 
 ## Setup
 ### Pip install
-The package will be pip installable. Run
+The package will be pip-installable. Run
 ```
 pip install TeacherAI
 ```
 ### Audio Source
 An audio interface such as a Focusrite Scarlett is recommended for optimal performance. Once set up, one could either use a line-in input or mic an amp. To view the avaliable audio sources, whilst in the root directory, run the following command
 
-- **MacOS**
+**MacOS**
 ```python
 python -m get_audio_source
 ```
-- **Ubuntu**
+**Ubuntu**
 ```
 python -m get_audio_source.py
 ```
