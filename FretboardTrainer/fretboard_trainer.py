@@ -29,8 +29,12 @@ class FretboardNoteTrainer:
             time.sleep(1)
 
 
-    def generate_note(self) -> str:
-        """Generate a random note to be match on the guitar"""
+    def generate_note(self) -> str: #TODO - Make this a generator (maybe)
+        """
+        Generate a random note to be match on the guitar
+        
+        :return: The note to be matched by the player
+        """
         try:
             correct_note = self.notes.pop()
         except KeyError:
