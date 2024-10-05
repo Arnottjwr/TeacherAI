@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[project]
+name = "TeacherAI"
+version = "1.0.0"
+authors = [
+  { name="Jack Arnott", email="jack.arnott@maths.ox.ac.uk" },
+]
+description = "A virtual guitar practice assistant"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+]
+[project.urls]
+Homepage = "https://github.com/Arnottjwr/TeacherAI"
+Issues = "https://github.com/Arnottjwr/TeacherAI/issues"
