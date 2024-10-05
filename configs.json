@@ -5,6 +5,6 @@
         "Rate": 44100
     },
     "FretboardTrainer": {
-        "RecordSeconds": 5
+        "RecordSeconds": 3
     }
 }
